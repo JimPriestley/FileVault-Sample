@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26127.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileVault", "FileVault.csproj", "{29920891-6417-4C22-9E55-5D66E826CB24}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CopyDirectory2Azure", "..\ConsoleApp1\CopyDirectory2Azure.csproj", "{F8F53225-C460-4E37-BB3D-DAEB0E7467EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{29920891-6417-4C22-9E55-5D66E826CB24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29920891-6417-4C22-9E55-5D66E826CB24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29920891-6417-4C22-9E55-5D66E826CB24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8F53225-C460-4E37-BB3D-DAEB0E7467EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8F53225-C460-4E37-BB3D-DAEB0E7467EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8F53225-C460-4E37-BB3D-DAEB0E7467EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8F53225-C460-4E37-BB3D-DAEB0E7467EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

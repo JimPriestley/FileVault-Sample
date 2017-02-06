@@ -47,7 +47,7 @@ namespace FileVault
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
 
             // Retrieve a reference to a container.
-            CloudBlobContainer container = blobClient.GetContainerReference(ConfigurationManager.AppSettings["container"]);
+            CloudBlobContainer container = blobClient.GetContainerReference(ContainerName);
 
             // Create the container if it doesn't already exist.
             // By default, the new container is private, meaning that you must specify your storage access key to download blobs from this container.
@@ -165,6 +165,7 @@ namespace FileVault
         public void WriteDirectory(string DirectoryPath, bool Recurse, string ContainerName, Microsoft.Azure.KeyVault.Core.IKey Key)
         {
             string[] files;
+            CreateContainer(ContainerName);
 
             if (Recurse)
             {
@@ -186,6 +187,8 @@ namespace FileVault
         {
             string[] files;
 
+            CreateContainer(ContainerName);
+
             if (Recurse)
             {
                 files = Directory.GetFiles(DirectoryPath, "*.*", SearchOption.AllDirectories);
@@ -198,13 +201,24 @@ namespace FileVault
             Parallel.ForEach(files, (currentFile) =>
             {
                 WriteBlobFile(currentFile, GetFileNameWithoutDriveLetter(currentFile), ContainerName);
+                Console.WriteLine(currentFile);
             });
         }
 
         //Strips the Drive and Colon off the front of the filename and also replaces '\' with '/'
         public string GetFileNameWithoutDriveLetter(string FileName)
         {
-            return FileName.Substring(2).Replace('\\', '/');
+            FileName =  FileName.Substring(2).Replace('\\', '/');
+
+            if (FileName.Substring(0, 1) == "/")
+            {
+                return FileName.Substring(1);
+            }
+            else
+            {
+                return FileName;
+            }
+
         }
 
         public string ConvertFileNameToBackSlash(string FileName)
