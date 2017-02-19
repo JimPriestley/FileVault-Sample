@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.WindowsAzure.Storage.Auth;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
-using Microsoft.Azure.KeyVault;
-using System.Threading;
-using System.IO;
-using System.Configuration;
+﻿using Microsoft.Azure.KeyVault;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Auth;
+using Microsoft.WindowsAzure.Storage.Blob;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace FileVault
 {
@@ -262,6 +260,8 @@ namespace FileVault
             // Retrieve reference to a blob named "myblob".
             CloudBlockBlob blob = container.GetBlockBlobReference(BlobName);
 
+            Directory.CreateDirectory(new FileInfo(DestinationPath).Directory.ToString());
+
             blob.DownloadToFile(DestinationPath, FileMode.Create);
         }
 
@@ -278,6 +278,8 @@ namespace FileVault
             // Retrieve reference to a blob named "myblob".
             CloudBlockBlob blob = container.GetBlockBlobReference(BlobName);
 
+            Directory.CreateDirectory(new FileInfo(DestinationPath).Directory.ToString());
+
             blob.DownloadToFile(DestinationPath, FileMode.Create, null, options, null);
         }
 
@@ -286,11 +288,16 @@ namespace FileVault
         {
             CloudBlobContainer container = GetContainerRefference(ContainerName);
 
-            var files = container.ListBlobs(Prefix, true);
+            IEnumerable<IListBlobItem> files;
+
+            if (Prefix == "*")
+                files = container.ListBlobs(null, true);
+            else
+                files = container.ListBlobs(Prefix, true);
 
             Parallel.ForEach(files, (currentFile) =>
             {
-                GetBlobFile(currentFile.ToString(), ContainerName, DestinationPath + currentFile.ToString());
+                GetBlobFile(((CloudBlob)currentFile).Name, ContainerName, DestinationPath + "\\" + ((CloudBlob)currentFile).Name);
             });
         }
 
@@ -299,11 +306,16 @@ namespace FileVault
         {
             CloudBlobContainer container = GetContainerRefference(ContainerName);
 
-            var files = container.ListBlobs(Prefix, true);
+            IEnumerable<IListBlobItem> files;
+
+            if (Prefix == "*")
+                files = container.ListBlobs(null, true);
+            else
+                files = container.ListBlobs(Prefix, true);
 
             Parallel.ForEach(files, (currentFile) =>
             {
-                GetBlobFile(currentFile.ToString(), ContainerName, DestinationPath + currentFile.ToString(), KeyResolver);
+                GetBlobFile(((CloudBlob)currentFile).Name, ContainerName, DestinationPath + "\\" + ((CloudBlob)currentFile).Name, KeyResolver);
             });
         }
 
